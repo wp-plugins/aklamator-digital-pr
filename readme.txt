@@ -89,9 +89,9 @@ Go to plugin configuration and check if the widget for single page post is set o
 == Screenshots ==
 
 1. Aklamator plugin configuration
-2. Aklamator appearance widgets
-3. Aklamator widget on a web page
-
+2. Aklamator dashboard with analytics
+3. Add new widget
+4. Demo widget - try live version with mouse over effects on (http://www.aklamator.com)
 == Changelog ==
 
 = 1.0 =
