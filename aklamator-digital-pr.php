@@ -3,7 +3,7 @@
 Plugin Name: Aklamator - Digital PR
 Plugin URI: http://www.aklamator.com/wordpress
 Description: Aklamator digital PR service enables you to sell PR announcements, cross promote web sites using RSS feed and provide new services to your clients in digital advertising.
-Version: 1.0
+Version: 1.1
 Author: Aklamator
 Author URI: http://www.aklamator.com/
 License: GPL2
@@ -19,50 +19,6 @@ GNU General Public License for more details.
 
 register_uninstall_hook(__FILE__, 'aklamator_uninstall');
 
-function aklamator_check_regex($path, $patterns) {
-    $to_replace = array(
-        '/(\r\n?|\n)/',
-        '/\\\\\*/',
-    );
-    $replacements = array('|','.*');
-    $patterns_fixed = preg_quote($patterns, '/');
-
-    $regexps[$patterns] = '/^(' . preg_replace($to_replace, $replacements, $patterns_fixed) . ')$/';
-    return (bool) preg_match($regexps[$patterns], $path);
-}
-
-function aklamator_show_page() {
-
-    $mode = trim(get_option("aklamatorPageFilterMode"));
-    $matched = FALSE;
-    $pagelist = trim(get_option("aklamatorPageFilterList"));
-
-    if ($mode == "0" || $mode =="") return TRUE;
-
-    if ( $pagelist != '') {
-        if(function_exists('mb_strtolower')) {
-            $pagelist = mb_strtolower($pagelist);
-            $currentpath = mb_strtolower($_SERVER['REQUEST_URI']);
-        }
-        else {
-            $pagelist = strtolower( $pagelist);
-            $currentpath = strtolower($_SERVER['REQUEST_URI']);
-        }
-
-        if (aklamator_check_regex($currentpath,"/wp-admin/*")) {
-            return TRUE;
-        }
-
-        $matched = aklamator_check_regex($currentpath, $pagelist);
-
-        $matched = ($mode == '2')?(!$matched):$matched;
-    }
-    else if($mode == '2'){
-        $matched = TRUE;
-    }
-    return $matched;
-}
-
 function aklamator_uninstall()
 {
 
@@ -77,9 +33,11 @@ function aklamator_uninstall()
     if(get_options('aklamatorSingleWidgetID')){
         delete_options('aklamatorSingleWidgetID');
     }
+
+    if(get_options('aklamatorSingleWidgetID')){
+        delete_options('aklamatorPageWidgetID');
+    }
 }
-
-
 
 
 if( !function_exists("bottom_of_every_post")){
@@ -88,10 +46,19 @@ if( !function_exists("bottom_of_every_post")){
         /*  we want to change `the_content` of posts, not pages
             and the text file must exist for this to work */
 
-        if( !is_page( )){
+        if (is_single()){
             $widget_id = get_option('aklamatorSingleWidgetID');
+        }elseif (is_page()) {
+            $widget_id = get_option('aklamatorPageWidgetID');
+        }else{
 
-            $title = "";
+            /*  if `the_content` belongs to a page or our file is missing
+                the result of this filter is no change to `the_content` */
+
+            return $content;
+        }
+
+        $title = "";
             if(get_option('aklamatorSingleWidgetTitle') !== ''){
                 $title .= "<h2>". get_option('aklamatorSingleWidgetTitle'). "</h2>";
             }
@@ -107,14 +74,6 @@ if( !function_exists("bottom_of_every_post")){
             fjs.parentNode.insertBefore(js, fjs);
          }(document, 'script', 'aklamator-$widget_id'));</script>
         <!-- end -->" . "<br>";  
-            
-        } else{
-
-            /*  if `the_content` belongs to a page or our file is missing
-                the result of this filter is no change to `the_content` */
-
-            return $content;
-        }
     }
 
 }
@@ -149,28 +108,30 @@ class AklamatorWidget
         {
 
            if(get_option('aklamatorSingleWidgetID') == ''){
-                if($this->api_data->data[0])
-                    update_option('aklamatorSingleWidgetID', $this->api_data->data[0]->uniq_name ); 
+                if($this->api_data->data[0]){
+                    update_option('aklamatorSingleWidgetID', $this->api_data->data[0]->uniq_name );
+                    update_option('aklamatorPageWidgetID', $this->api_data->data[0]->uniq_name );
+                }
 
             }
             if(get_option('aklamatorSingleWidgetID') !== '') add_filter('the_content', 'bottom_of_every_post');
+             
         }
 
     }
-
 
     function setOptions()
     {
         register_setting('aklamator-options', 'aklamatorApplicationID');
         register_setting('aklamator-options', 'aklamatorPoweredBy');
         register_setting('aklamator-options', 'aklamatorSingleWidgetID');
+        register_setting('aklamator-options', 'aklamatorPageWidgetID');
         register_setting('aklamator-options', 'aklamatorSingleWidgetTitle');
 
     }
 
     public function adminMenu()
     {
-
         add_menu_page('Aklamator Digital PR', 'Aklamator PR', 'manage_options', 'aklamator-digital-pr', array(
             $this,
             'createAdminPage'
@@ -338,15 +299,13 @@ class AklamatorWidget
            
                     <p> 
                     <h1>Options</h1>
-                    <h4>Select widget to be shown on bottom of the each single page</h4>
+                    <h4>Select widget to be shown on bottom of the each:</h4>
 
                     <label for="aklamatorSingleWidgetTitle">Title Above widget (Optional): </label>    
                     <input type="text" style="width: 300px; margin-bottom:10px" name="aklamatorSingleWidgetTitle" id="aklamatorSingleWidgetTitle" value="<?php echo (get_option("aklamatorSingleWidgetTitle")); ?>" maxlength="999" />
-                    
-                    <label for="aklamatorSingleWidgetID">Widgets: </label>
-                    <select id="aklamatorSingleWidgetID" name="aklamatorSingleWidgetID">
 
-                        <?php 
+                    <?php 
+
                         $widgets = $this->api_data->data;
 
                         /* Add new item to the end of array */
@@ -354,20 +313,37 @@ class AklamatorWidget
                         $item_add->uniq_name = 'none';
                         $item_add->title = 'Do not show';
                         $widgets[] = $item_add;
-                        
+
+                    ?>   
+                    
+                    <label for="aklamatorSingleWidgetID">Single post: </label>
+                    <select id="aklamatorSingleWidgetID" name="aklamatorSingleWidgetID">
+                        <?php    
                         foreach ( $widgets as $item ): ?>
                             <option <?php echo (get_option('aklamatorSingleWidgetID') == $item->uniq_name)? 'selected="selected"' : '' ;?> value="<?php echo $item->uniq_name; ?>"><?php echo $item->title; ?></option>
                         <?php endforeach; ?>
                         
                     </select>
                     </p>
-                   
+
+                    <p>
+                        <label for="aklamatorPageWidgetID">Single page: </label>
+                        <select id="aklamatorPageWidgetID" name="aklamatorPageWidgetID">
+                            <?php
+                            foreach ( $widgets as $item ): ?>
+                                <option <?php echo (get_option('aklamatorPageWidgetID') == $item->uniq_name)? 'selected="selected"' : '' ;?> value="<?php echo $item->uniq_name; ?>"><?php echo $item->title; ?></option>
+                            <?php endforeach; ?>
+                            
+                        </select>
+                    </p>
+
                 
             <?php endif; ?>
              <input style ="margin-bottom:15px;" type="submit" value="<?php echo (_e("Save Changes")); ?>" />
 
-             </div>   
+
             </form>
+            </div>
 
         </div>
 
