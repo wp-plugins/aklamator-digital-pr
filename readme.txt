@@ -25,19 +25,19 @@ Aklamator will not push you media releases from other websites.
 Aklamator is not traffic exchange service or ad exchange network.
 
 
-** Make you own ad network **
+**Make you own ad network**
 Your creativity is the limit. Feel free to choose any RSS to feed your widget positions. You can use our service to populate your website and make your blog more interesting for visitors thus reducing effective bounce rate.
 
 Our service enables you to track statistics of views and clicks for each widget that you place. Inform your visitors and offer new services to your clients.
 
-** See recommendations how to make successful media releases **
+**See recommendations how to make successful media releases**
 [Media release recommendation >>](http://aklamator.com/pdf/aklamator-digital-pr-bestpractice-en.pdf)
 
 == Installation ==
 
 [Step by step instructions >>](http://www.aklamator.com/wordpress?utm_source=wordpress&utm_medium=store&utm_campaign=wordpress)
 
-** How to activate and use Aklamator on your wordpress website? **
+**How to activate and use Aklamator on your wordpress website**
 
 If already have registered Aklamator account and own website that is using Wordpress please skip to step 2
 
@@ -57,14 +57,14 @@ If you don not have any Aklamator widgets, create one. Click Add new widget to c
 
 **3. step** : Download Aklamator wordpress plugin and paste your Aklamator Application ID
 
-* Upload and unzip plugin `aklamator_widget.zip` to the `/wp-content/plugins/` directory
-* Activate the Aklamator plugin through the 'Plugins' menu in WordPress
+*Upload and unzip plugin `aklamator_widget.zip` to the `/wp-content/plugins/` directory
+*Activate the Aklamator plugin through the 'Plugins' menu in WordPress
 
 Go to your WordPress administration panel and paste the Aklamator Application ID
 
 **WELL DONE!** Aklamator is now active on your Wordpress website and you should be able to see available aklamator widgets in the bottom half of the screen.
 
-* Go to Appearance then Widgets and drag and drop Aklamator Digital PR field and choose desired widget
+*Go to Appearance then Widgets and drag and drop Aklamator Digital PR field and choose desired widget
 
 Now you can log into the Aklamator and create more widgets and add RSS feed to populate them with media releases. Later you could add paid media releases and their target number of clicks.
 
