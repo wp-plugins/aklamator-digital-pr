@@ -4,7 +4,7 @@ Donate link: http://www.aklamator.com/
 Tags: aklamator.com, aklamator, aclamator, digital pr, widget, widgets, content promotion, agency, publisher, media management, statistic tracking, cross promotion
 Requires at least: 3.0.1
 Tested up to: 4.1
-Stable tag: 1.1
+Stable tag: 1.1.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -93,6 +93,9 @@ Go to plugin configuration and check if the widget for single page post is set o
 3. Aklamator widget on a web page
 
 == Changelog ==
+
+= 1.1.1 =
+* Minor Bug fix
 
 = 1.1 =
 * Added new feature - Widget can be placed on Single page (static page). New plugin icon.

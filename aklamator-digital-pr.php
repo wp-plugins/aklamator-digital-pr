@@ -3,7 +3,7 @@
 Plugin Name: Aklamator - Digital PR
 Plugin URI: http://www.aklamator.com/wordpress
 Description: Aklamator digital PR service enables you to sell PR announcements, cross promote web sites using RSS feed and provide new services to your clients in digital advertising.
-Version: 1.1
+Version: 1.1.1
 Author: Aklamator
 Author URI: http://www.aklamator.com/
 License: GPL2
@@ -18,6 +18,18 @@ GNU General Public License for more details.
 */
 
 register_uninstall_hook(__FILE__, 'aklamator_uninstall');
+
+
+
+register_activation_hook( __FILE__, 'set_up_options' );
+
+function set_up_options(){
+    add_option('aklamatorApplicationID', '');
+    add_option('aklamatorPoweredBy', '');
+    add_option('aklamatorSingleWidgetID', '');
+    add_option('aklamatorPageWidgetID', '');
+    add_option('aklamatorSingleWidgetTitle', '');
+}
 
 function aklamator_uninstall()
 {
@@ -34,9 +46,15 @@ function aklamator_uninstall()
         delete_options('aklamatorSingleWidgetID');
     }
 
-    if(get_options('aklamatorSingleWidgetID')){
+    if(get_options('aklamatorPageWidgetID')){
         delete_options('aklamatorPageWidgetID');
     }
+
+    if(get_options('aklamatorSingleWidgetTitle')){
+        delete_options('aklamatorSingleWidgetTitle');
+    }
+
+
 }
 
 
@@ -104,19 +122,29 @@ class AklamatorWidget
                 $this->api_data =  $this->addNewWebsiteApi();
             }
         }
-        if(get_option('aklamatorSingleWidgetID') !== 'none' )
-        {
+        if (get_option('aklamatorSingleWidgetID') !== 'none') {
 
-           if(get_option('aklamatorSingleWidgetID') == ''){
-                if($this->api_data->data[0]){
-                    update_option('aklamatorSingleWidgetID', $this->api_data->data[0]->uniq_name );
-                    update_option('aklamatorPageWidgetID', $this->api_data->data[0]->uniq_name );
+            if (get_option('aklamatorSingleWidgetID') == '') {
+                if ($this->api_data->data[0]) {
+                    update_option('aklamatorSingleWidgetID', $this->api_data->data[0]->uniq_name);
                 }
 
             }
-            if(get_option('aklamatorSingleWidgetID') !== '') add_filter('the_content', 'bottom_of_every_post');
-             
+            add_filter('the_content', 'bottom_of_every_post');
         }
+
+        if (get_option('aklamatorPageWidgetID') !== 'none') {
+
+            if (get_option('aklamatorPageWidgetID') == '') {
+                if ($this->api_data->data[0]) {
+                    update_option('aklamatorPageWidgetID', $this->api_data->data[0]->uniq_name);
+                }
+
+            }
+            add_filter('the_content', 'bottom_of_every_post');
+        }
+
+
 
     }
 
