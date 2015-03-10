@@ -17,9 +17,23 @@ GNU General Public License for more details.
 
 */
 
-register_uninstall_hook(__FILE__, 'aklamator_uninstall');
+/*
+ * Add setting link on plugin page
+ */
 
+if( !function_exists("aklamator_plugin_settings_link")){
+    // Add settings link on plugin page
+    function aklamator_plugin_settings_link($links) {
+        $settings_link = '<a href="admin.php?page=aklamator-digital-pr">Settings</a>';
+        array_unshift($links, $settings_link);
+        return $links;
+    }
+}
+add_filter("plugin_action_links_".plugin_basename(__FILE__), 'aklamator_plugin_settings_link' );
 
+/*
+ * Activation Hook
+ */
 
 register_activation_hook( __FILE__, 'set_up_options' );
 
@@ -30,6 +44,11 @@ function set_up_options(){
     add_option('aklamatorPageWidgetID', '');
     add_option('aklamatorSingleWidgetTitle', '');
 }
+
+/*
+ * Uninstall Hook
+ */
+register_uninstall_hook(__FILE__, 'aklamator_uninstall');
 
 function aklamator_uninstall()
 {
