@@ -576,7 +576,7 @@ class Wp_widget_aklamator extends WP_Widget {
         <?php else :?>
             <br>
             <span style="color:red">Please make sure that you configured Aklamator plugin correctly</span>
-            <a href="<?php echo admin_url(); ?>admin.php?page=aklamator-widget">Click here to configure Aklamator plugin</a>
+            <a href="<?php echo admin_url(); ?>admin.php?page=aklamator-digital-pr">Click here to configure Aklamator plugin</a>
             <br>
             <br>
         <?php endif;
