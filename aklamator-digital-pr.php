@@ -3,7 +3,7 @@
 Plugin Name: Aklamator - Digital PR
 Plugin URI: http://www.aklamator.com/wordpress
 Description: Aklamator digital PR service enables you to sell PR announcements, cross promote web sites using RSS feed and provide new services to your clients in digital advertising.
-Version: 1.1.1
+Version: 1.1.2
 Author: Aklamator
 Author URI: http://www.aklamator.com/
 License: GPL2
@@ -17,9 +17,23 @@ GNU General Public License for more details.
 
 */
 
-register_uninstall_hook(__FILE__, 'aklamator_uninstall');
+/*
+ * Add setting link on plugin page
+ */
 
+if( !function_exists("aklamator_plugin_settings_link")){
+    // Add settings link on plugin page
+    function aklamator_plugin_settings_link($links) {
+        $settings_link = '<a href="admin.php?page=aklamator-digital-pr">Settings</a>';
+        array_unshift($links, $settings_link);
+        return $links;
+    }
+}
+add_filter("plugin_action_links_".plugin_basename(__FILE__), 'aklamator_plugin_settings_link' );
 
+/*
+ * Activation Hook
+ */
 
 register_activation_hook( __FILE__, 'set_up_options' );
 
@@ -30,6 +44,11 @@ function set_up_options(){
     add_option('aklamatorPageWidgetID', '');
     add_option('aklamatorSingleWidgetTitle', '');
 }
+
+/*
+ * Uninstall Hook
+ */
+register_uninstall_hook(__FILE__, 'aklamator_uninstall');
 
 function aklamator_uninstall()
 {
@@ -246,9 +265,9 @@ class AklamatorWidget
                 -webkit-box-shadow: inset 0 -2px #b53224;
                 box-shadow: inset 0 -2px #b53224;
                 text-decoration: none;
-                margin-top: 10px;
+                margin-top: 3px;
                 margin-bottom: 10px;
-                clear: both;
+                /*clear: both;*/
             }
 
             a.aklamator-signup-button:hover {
@@ -297,14 +316,20 @@ class AklamatorWidget
                 <?php
 
                 if ($code == '') : ?>
-                    <a class='aklamator-signup-button' target='_blank' href="<?php echo $this->getSignupUrl(); ?>">Click here to create your account!</a>
+                    <h3 style="float: left">Step 1:</h3>
+                    <a style="float: right" class='aklamator-signup-button' target='_blank' href="<?php echo $this->getSignupUrl(); ?>">Click here to create your FREE account!</a>
 
                 <?php endif; ?>
 
 
 
                 <div style="clear: both"></div>
-                <h3>Enter your Aklamator Application ID</h3>
+                <?php if ($code == '') { ?>
+                    <h3>Step 2: &nbsp;&nbsp;&nbsp;&nbsp; Paste your Aklamator Application ID</h3>
+                    <?php }else{ ?>
+                    <h3>Your Aklamator Application ID</h3>
+                <?php } ?>
+
 
                 <form method="post" action="options.php">
                     <?php
@@ -499,7 +524,7 @@ class Wp_widget_aklamator extends WP_Widget {
         parent::__construct(
             'wp_widget_aklamator', // Base ID
             'Aklamator Digital PR', // Name
-            array( 'description' => __( 'Display Custom Text', 'envirra-backend' ), ) // Args
+            array( 'description' => __( 'Display Aklamator Widgets in Sidebar')) // Widget Description
         );
 
 
@@ -576,7 +601,7 @@ class Wp_widget_aklamator extends WP_Widget {
         <?php else :?>
             <br>
             <span style="color:red">Please make sure that you configured Aklamator plugin correctly</span>
-            <a href="<?php echo admin_url(); ?>admin.php?page=aklamator-widget">Click here to configure Aklamator plugin</a>
+            <a href="<?php echo admin_url(); ?>admin.php?page=aklamator-digital-pr">Click here to configure Aklamator plugin</a>
             <br>
             <br>
         <?php endif;
