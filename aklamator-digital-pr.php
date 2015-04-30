@@ -3,7 +3,7 @@
 Plugin Name: Aklamator - Digital PR
 Plugin URI: http://www.aklamator.com/wordpress
 Description: Aklamator digital PR service enables you to sell PR announcements, cross promote web sites using RSS feed and provide new services to your clients in digital advertising.
-Version: 1.1.2
+Version: 1.2
 Author: Aklamator
 Author URI: http://www.aklamator.com/
 License: GPL2
@@ -206,7 +206,7 @@ class AklamatorWidget
 
         $service     = $this->aklamator_url . "wp-authenticate/user";
         $p['ip']     = $_SERVER['REMOTE_ADDR'];
-        $p['url']    = site_url();
+        $p['domain'] = site_url();
         $p['source'] = "wordpress";
         $p['AklamatorApplicationID'] = get_option('aklamatorApplicationID');
 
@@ -400,23 +400,25 @@ class AklamatorWidget
 
         </div>
 
-
-
-        <?php if(!empty($this->api_data)) : ?>
-
         <div style="clear:both"></div>
         <div style="margin-top: 20px; margin-left: 0px; width: 810px;" class="box">
 
-        <?php if($this->api_data->flag ): ?>
-
             <!-- Start of dataTables -->
             <div id="aklamator-options">
-                <h1>
-
-                    Your Widgets
-                </h1>
+                <h1>Your Widgets</h1>
             </div>
             <br>
+
+        <?php if (get_option('aklamatorApplicationID') == ""): ?>
+            <a href="<?php echo $this->getSignupUrl(); ?>" target="_blank"><img style="border-radius:5px;border:0px;" src=" <?php echo plugins_url('images/teaser-810x262.png', __FILE__);?>" /></a>
+        <?php else: ?>
+
+        <?php if(!empty($this->api_data)) : ?>
+
+        <?php if($this->api_data->flag ): ?>
+
+
+
             <table cellpadding="0" cellspacing="0" border="0"
                    class="responsive dynamicTable display table table-bordered" width="100%">
                 <thead>
@@ -462,7 +464,7 @@ class AklamatorWidget
 
         <?php endif;
     endif;
-        ?>
+    endif; ?>
 
 
         <!-- load js scripts -->

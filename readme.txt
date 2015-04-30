@@ -3,12 +3,12 @@ Contributors: (aklamator)
 Donate link: http://www.aklamator.com/
 Tags: aklamator.com, aklamator, aclamator, digital pr, widget, widgets, content promotion, agency, publisher, media management, statistic tracking, cross promotion
 Requires at least: 3.0.1
-Tested up to: 4.1
-Stable tag: 1.1.2
+Tested up to: 4.2.1
+Stable tag: 1.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Aklamator digital PR plugin enables you to sell PR announcements, cross promote web sites using RSS feed and provide new services to your clients in digital advertising.
+Aklamator digital PR plugin enables you to sell PR announcements, cross promote web sites using RSS feed and provide new services to your clients.
 
 == Description ==
 
@@ -31,6 +31,7 @@ Your creativity is the limit. Feel free to choose any RSS to feed your widget po
 Our service enables you to track statistics of views and clicks for each widget that you place. Inform your visitors and offer new services to your clients.
 
 **See recommendations how to make successful media releases**
+
 [Media release recommendation >>](http://aklamator.com/pdf/aklamator-digital-pr-bestpractice-en.pdf)
 
 == Installation ==
@@ -41,34 +42,34 @@ Our service enables you to track statistics of views and clicks for each widget 
 
 If already have registered Aklamator account and own website that is using Wordpress please skip to step 2
 
-**1. step** : Sign Up [Aklamator](http://www.aklamator.com/ "Aklamator Digital PR")  and get free Aklamator account and Aklamator Application ID.
-
-Click on Sign up and choose publisher
+**1. step** : [Sign Up] (http://aklamator.com/registration/publisher "Aklamator Digital PR Sign up") Aklamator and get free Aklamator account and Aklamator Application ID.
 
 Fill your information and click “Create new account”
 You will get verification email with activation link
 (please check SPAM folder if it is missing).  After activating your account proceed to login to Aklamator.
 
-**2. step** : Sign in and get your Aklamator Application ID
+**2. step** : [Sign in] (http://aklamator.com/login) and get your Aklamator Application ID
 
 After logging in, go to your profile and copy Application ID
 
-If you don not have any Aklamator widgets, create one. Click Add new widget to create your first Aklamator widget. Choose dimensions (number of media releases vertically and horizontally), photo dimension and URL of RSS feed.
+After pasting Application ID to your wordpress plugin, it will automatically create first plugin for your blog and populate it with your RSS feed.
+It becomes visible in plugin settings (list below).
+Widget is 4x1 150x150px. If you want to change widget dimensions you can do that by logging to [Aklamator web] (http://aklamator.com/login)
 
 **3. step** : Download Aklamator wordpress plugin and paste your Aklamator Application ID
 
-*Upload and unzip plugin `aklamator_widget.zip` to the `/wp-content/plugins/` directory
-*Activate the Aklamator plugin through the 'Plugins' menu in WordPress
+* Upload and unzip plugin `aklamator_widget.zip` to the `/wp-content/plugins/` directory
+* Activate the Aklamator plugin through the 'Plugins' menu in WordPress
 
 Go to your WordPress administration panel and paste the Aklamator Application ID
 
 **WELL DONE!** Aklamator is now active on your Wordpress website and you should be able to see available aklamator widgets in the bottom half of the screen.
 
-*Go to Appearance then Widgets and drag and drop Aklamator Digital PR field and choose desired widget
+* Go to Appearance then Widgets and drag and drop Aklamator Digital PR field and choose desired widget
 
-Now you can log into the Aklamator and create more widgets and add RSS feed to populate them with media releases. Later you could add paid media releases and their target number of clicks.
+Now you can [Log in] (http://aklamator.com/login) to the Aklamator and create more widgets and add RSS feed to populate them with media releases. Later you could add paid media releases and their target number of clicks.
 
-To track statistics and for get additional configuration, please login to Aklamator website.
+To track statistics and for get additional configuration, please [login] (http://aklamator.com/login) to Aklamator website.
 
 ####Questions? Contact us!####
 
@@ -81,18 +82,34 @@ To track statistics and for get additional configuration, please login to Aklama
 
 Is Application ID correct? When you save changes, does the list of your widgets appear below? If it is empty, please login to Aklamator.com and create first widget.
 
-
 = Aklamator widget is not showing below posts (single page post) or wrong widget is shown. =
 
 Go to plugin configuration and check if the widget for single page post is set or change as you wish.
 
+= Where can I add my RSS feed =
+
+[login] (http://aklamator.com/login) to aklamator and add or edit your widget. There you can add your RSS feed URL to your widget. Aklamator supports multiple RSS feeds per widget.
+
+= Can I serve multiple aklamator widgets on same page =
+Yes you can! But one widget can only be placed once per page, so use multiple widgets.
+
 == Screenshots ==
 
 1. Aklamator plugin configuration
-2. Aklamator appearance widgets
-3. Aklamator widget on a web page
+2. How to get Application ID
+3. Aklamator Dashboard where you can analyze and setup widgets.
+4. Add or edit your aklamator widgets
+5. How the aklamator widget looks like?
 
 == Changelog ==
+= 1.2 =
+
+* Added feature - after installation and paste AppID plugin now auto creates first widget and populate it with your blog RSS feed items (for your convenience)
+* Minor bug fix
+* Tested for newer version of WP 4.2.1
+
+= 1.1.3 =
+* Added Help image
 
 = 1.1.2 =
 * Added steps for explanation how to get Aklamator ID code
