@@ -4,7 +4,7 @@ Donate link: http://www.aklamator.com/
 Tags: aklamator.com, aklamator, aclamator, digital pr, widget, widgets, content promotion, agency, publisher, media management, statistic tracking, cross promotion
 Requires at least: 3.0.1
 Tested up to: 4.2.1
-Stable tag: 1.3
+Stable tag: 1.3.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -102,6 +102,9 @@ Yes you can! But one widget can only be placed once per page, so use multiple wi
 5. How the aklamator widget looks like?
 
 == Changelog ==
+
+= 1.3.2 =
+* Minor bug fix - AppID change standard version
 
 = 1.3 =
 * Added feature - info message in widget table
