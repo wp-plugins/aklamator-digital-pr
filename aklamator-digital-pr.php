@@ -3,7 +3,7 @@
 Plugin Name: Aklamator - Digital PR
 Plugin URI: http://www.aklamator.com/wordpress
 Description: Aklamator digital PR service enables you to sell PR announcements, cross promote web sites using RSS feed and provide new services to your clients in digital advertising.
-Version: 1.2
+Version: 1.3
 Author: Aklamator
 Author URI: http://www.aklamator.com/
 License: GPL2
@@ -224,6 +224,12 @@ class AklamatorWidget
         }
 
         $data = curl_exec($client);
+        if (curl_error($client)!= "") {
+            $this->curlfailovao=1;
+        } else {
+            $this->curlfailovao=0;
+        }
+
         curl_close($client);
 
         $data = json_decode($data);
@@ -339,16 +345,18 @@ class AklamatorWidget
                     <p >
                         <input type="text" style="width: 400px" name="aklamatorApplicationID" id="aklamatorApplicationID" value="<?php
                         echo (get_option("aklamatorApplicationID"));
-                        ?>" maxlength="999" />
+                        ?>" maxlength="999" onchange="appIDChange(this.value)"/>
 
                     </p>
                     <p>
                         <input type="checkbox" id="aklamatorPoweredBy" name="aklamatorPoweredBy" <?php echo (get_option("aklamatorPoweredBy") == true ? 'checked="checked"' : ''); ?> Required="Required">
                         <strong>Required</strong> I acknowledge there is a 'powered by aklamator' link on the widget. <br />
                     </p>
-
+                    <?php if($this->api_data->flag === false): ?>
+                        <p><span style="color:red"><?php echo $this->api_data->error; ?></span></p>
+                    <?php endif; ?>
            
-            <?php if(get_option('aklamatorApplicationID') !=='' && $this->api_data->flag): ?>
+                    <?php if(get_option('aklamatorApplicationID') !=='' && $this->api_data->flag): ?>
            
                     <p> 
                     <h1>Options</h1>
@@ -403,22 +411,18 @@ class AklamatorWidget
         <div style="clear:both"></div>
         <div style="margin-top: 20px; margin-left: 0px; width: 810px;" class="box">
 
+            <?php if ($this->curlfailovao && get_option('aklamatorApplicationID') != ''): ?>
+                <h2 style="color:red">Error communicating with Aklamator server, please refresh plugin page or try again later. </h2>
+            <?php endif;?>
+            <?php if(!$this->api_data->flag): ?>
+                <a href="<?php echo $this->getSignupUrl(); ?>" target="_blank"><img style="border-radius:5px;border:0px;" src=" <?php echo plugins_url('images/teaser-810x262.png', __FILE__);?>" /></a>
+            <?php else : ?>
             <!-- Start of dataTables -->
-            <div id="aklamator-options">
+            <div id="aklamatorPro-options">
                 <h1>Your Widgets</h1>
+                <div>In order to add new widgets or change dimensions please <a href="http://aklamator.com/login" target="_blank">login to aklamator</a></div>
             </div>
             <br>
-
-        <?php if (get_option('aklamatorApplicationID') == ""): ?>
-            <a href="<?php echo $this->getSignupUrl(); ?>" target="_blank"><img style="border-radius:5px;border:0px;" src=" <?php echo plugins_url('images/teaser-810x262.png', __FILE__);?>" /></a>
-        <?php else: ?>
-
-        <?php if(!empty($this->api_data)) : ?>
-
-        <?php if($this->api_data->flag ): ?>
-
-
-
             <table cellpadding="0" cellspacing="0" border="0"
                    class="responsive dynamicTable display table table-bordered" width="100%">
                 <thead>
@@ -437,7 +441,11 @@ class AklamatorWidget
 
                     <tr class="odd">
                         <td style="vertical-align: middle;" ><?php echo $item->title; ?></td>
-                        <td style="vertical-align: middle;" ><?php echo $item->domain; ?></td>
+                        <td style="vertical-align: middle;" >
+                            <?php foreach($item->domain_ids as $domain): ?>
+                                <a href="<?php echo $domain->url; ?>" target="_blank"><?php echo $domain->title; ?></a><br/>
+                            <?php endforeach; ?>
+                        </td>
                         <td style="vertical-align: middle;" ><?php echo $item->img_size; ?>px</td>
                         <td style="vertical-align: middle;" ><?php echo $item->column_number; ?> x <?php echo $item->row_number; ?></td>
                         <td style="vertical-align: middle;" ><?php echo $item->date_created; ?></td>
@@ -452,19 +460,12 @@ class AklamatorWidget
                     <th>Immg size</th>
                     <th>Column/row</th>
                     <th>Created At</th>
-
-
                 </tr>
                 </tfoot>
             </table>
-            </div>
+        </div>
 
-        <?php else : ?>
-            <span style="color:red"><?php echo $this->api_data->error; ?></span>
-
-        <?php endif;
-    endif;
-    endif; ?>
+    <?php endif; ?>
 
 
         <!-- load js scripts -->
@@ -474,6 +475,14 @@ class AklamatorWidget
 
 
         <script type="text/javascript">
+
+            function appIDChange(val) {
+
+                $('#aklamatorProSingleWidgetID option:first-child').val('');
+                $('#aklamatorProPageWidgetID option:first-child').val('');
+
+            }
+
             $(document).ready(function(){
 
                 if ($('table').hasClass('dynamicTable')) {
