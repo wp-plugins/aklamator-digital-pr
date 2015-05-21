@@ -3,7 +3,7 @@
 Plugin Name: Aklamator - Digital PR
 Plugin URI: http://www.aklamator.com/wordpress
 Description: Aklamator digital PR service enables you to sell PR announcements, cross promote web sites using RSS feed and provide new services to your clients in digital advertising.
-Version: 1.3.3
+Version: 1.4.0
 Author: Aklamator
 Author URI: http://www.aklamator.com/
 License: GPL2
@@ -366,8 +366,8 @@ class AklamatorWidget
                         foreach ( $widgets as $item ): ?>
                             <option <?php echo (get_option('aklamatorSingleWidgetID') == $item->uniq_name)? 'selected="selected"' : '' ;?> value="<?php echo $item->uniq_name; ?>"><?php echo $item->title; ?></option>
                         <?php endforeach; ?>
-                        
                     </select>
+                    <input style="margin-left: 5px;" type="button" class="button primary big submit" onclick="myFunction($('#aklamatorSingleWidgetID option[selected]').val())" value="Preview">
                     </p>
 
                     <p>
@@ -377,8 +377,9 @@ class AklamatorWidget
                             foreach ( $widgets as $item ): ?>
                                 <option <?php echo (get_option('aklamatorPageWidgetID') == $item->uniq_name)? 'selected="selected"' : '' ;?> value="<?php echo $item->uniq_name; ?>"><?php echo $item->title; ?></option>
                             <?php endforeach; ?>
-                            
                         </select>
+                        <input style="margin-left: 5px;" type="button" class="button primary big submit" onclick="myFunction($('#aklamatorPageWidgetID option[selected]').val())" value="Preview">
+
                     </p>
 
                 
@@ -413,6 +414,7 @@ class AklamatorWidget
 
                     <th>Name</th>
                     <th>Domain</th>
+                    <th>Settings</th>
                     <th>Image size</th>
                     <th>Column/row</th>
                     <th>Created At</th>
@@ -429,6 +431,9 @@ class AklamatorWidget
                                 <a href="<?php echo $domain->url; ?>" target="_blank"><?php echo $domain->title; ?></a><br/>
                             <?php endforeach; ?>
                         </td>
+                        <td style="vertical-align: middle"><div style="float: left; margin-right: 10px" class="button-group">
+                                <input type="button" class="button primary big submit" onclick="myFunction('<?php echo $item->uniq_name; ?>')" value="Preview Widget">
+                        </td>
                         <td style="vertical-align: middle;" ><?php echo $item->img_size; ?>px</td>
                         <td style="vertical-align: middle;" ><?php echo $item->column_number; ?> x <?php echo $item->row_number; ?></td>
                         <td style="vertical-align: middle;" ><?php echo $item->date_created; ?></td>
@@ -440,6 +445,7 @@ class AklamatorWidget
                 <tr>
                     <th>Name</th>
                     <th>Domain</th>
+                    <th>Settings</th>
                     <th>Immg size</th>
                     <th>Column/row</th>
                     <th>Created At</th>
@@ -463,6 +469,26 @@ class AklamatorWidget
 
                 $('#aklamatorSingleWidgetID option:first-child').val('');
                 $('#aklamatorPageWidgetID option:first-child').val('');
+
+            }
+
+            function myFunction(widget_id) {
+
+                var myWindow = window.open("", "myWindow", "width=900, height=400, top=200, left=500");
+
+                tekst = '<div style="margin: 50px 0px" id="akla' + widget_id + '"></div>';
+                tekst += '<script>(function(d, s, id) {';
+                tekst += 'var js, fjs = d.getElementsByTagName(s)[0];';
+                tekst += 'if (d.getElementById(id)) return;';
+                tekst += 'js = d.createElement(s); js.id = id;';
+                tekst += 'js.src = "http://aklamator.com/widget/' + widget_id + '";';
+                tekst += 'fjs.parentNode.insertBefore(js, fjs);';
+                tekst += '}(document, \'script\', \'aklamator-' + widget_id + '\'))<\/script>';
+
+                myWindow.document.write('');
+                myWindow.document.close();
+                myWindow.document.write(tekst);
+                myWindow.focus();
 
             }
 
