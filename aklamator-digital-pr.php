@@ -3,7 +3,7 @@
 Plugin Name: Aklamator - Digital PR
 Plugin URI: http://www.aklamator.com/wordpress
 Description: Aklamator digital PR service enables you to sell PR announcements, cross promote web sites using RSS feed and provide new services to your clients in digital advertising.
-Version: 1.4.1
+Version: 1.4.2
 Author: Aklamator
 Author URI: http://www.aklamator.com/
 License: GPL2
@@ -175,7 +175,7 @@ class AklamatorWidget
     {
         
         return $this->aklamator_url . 'registration/publisher?utm_source=wordpress&utm_medium=admin&e=' . urlencode(get_option('admin_email')) . '&pub=' .  preg_replace('/^www\./','',$_SERVER['SERVER_NAME']).
-        '&un=' . urlencode(wp_get_current_user()->display_name);
+        '&un=' . urlencode(wp_get_current_user()->display_name).'&domain='.site_url();
 
     }
 
