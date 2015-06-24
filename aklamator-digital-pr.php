@@ -3,7 +3,7 @@
 Plugin Name: Aklamator - Digital PR
 Plugin URI: http://www.aklamator.com/wordpress
 Description: Aklamator digital PR service enables you to sell PR announcements, cross promote web sites using RSS feed and provide new services to your clients in digital advertising.
-Version: 1.4.1
+Version: 1.4.3
 Author: Aklamator
 Author URI: http://www.aklamator.com/
 License: GPL2
@@ -175,7 +175,7 @@ class AklamatorWidget
     {
         
         return $this->aklamator_url . 'registration/publisher?utm_source=wordpress&utm_medium=admin&e=' . urlencode(get_option('admin_email')) . '&pub=' .  preg_replace('/^www\./','',$_SERVER['SERVER_NAME']).
-        '&un=' . urlencode(wp_get_current_user()->display_name);
+        '&un=' . urlencode(wp_get_current_user()->display_name).'&domain='.site_url();
 
     }
 
@@ -368,7 +368,7 @@ class AklamatorWidget
                             <option <?php echo (get_option('aklamatorSingleWidgetID') == $item->uniq_name)? 'selected="selected"' : '' ;?> value="<?php echo $item->uniq_name; ?>"><?php echo $item->title; ?></option>
                         <?php endforeach; ?>
                     </select>
-                    <input style="margin-left: 5px;" type="button" class="button primary big submit" onclick="myFunction($('#aklamatorSingleWidgetID option[selected]').val())" value="Preview">
+                    <input style="margin-left: 5px;" id="preview_single" type="button" class="button primary big submit" onclick="myFunction($('#aklamatorSingleWidgetID option[selected]').val())" value="Preview" <?php echo get_option('aklamatorSingleWidgetID')=="none"? "disabled" :"" ;?>>
                     </p>
 
                     <p>
@@ -379,7 +379,7 @@ class AklamatorWidget
                                 <option <?php echo (get_option('aklamatorPageWidgetID') == $item->uniq_name)? 'selected="selected"' : '' ;?> value="<?php echo $item->uniq_name; ?>"><?php echo $item->title; ?></option>
                             <?php endforeach; ?>
                         </select>
-                        <input style="margin-left: 5px;" type="button" class="button primary big submit" onclick="myFunction($('#aklamatorPageWidgetID option[selected]').val())" value="Preview">
+                        <input style="margin-left: 5px;" type="button" id="preview_page" class="button primary big submit" onclick="myFunction($('#aklamatorPageWidgetID option[selected]').val())" value="Preview" <?php echo get_option('aklamatorPageWidgetID')=="none"? "disabled" :"" ;?>>
 
                     </p>
 
@@ -485,6 +485,8 @@ class AklamatorWidget
                 tekst += 'js.src = "http://aklamator.com/widget/' + widget_id + '";';
                 tekst += 'fjs.parentNode.insertBefore(js, fjs);';
                 tekst += '}(document, \'script\', \'aklamator-' + widget_id + '\'))<\/script>';
+                tekst += '<hr><b>Widget doesn\'t show expected thumbnail or image? </b><br>' +
+                'Please note that Aklamator gets first image or YouTube thumbnail for each item in your feed. <br> If there is no image or YouTube video in your feed, Aklamator will show default image. Please check your feed! <br><br> <b>Tip:</b> images should be square. We are offering image resizing and caching service, please <a href="http://aklamator.com/support/ticket" target="_blank">contact us.</a>';
 
                 myWindow.document.write('');
                 myWindow.document.close();
@@ -494,6 +496,52 @@ class AklamatorWidget
             }
 
             $(document).ready(function(){
+
+
+                $("#aklamatorSingleWidgetID").change(function(){
+
+                    if($(this).val() == 'none'){
+                        $('#preview_single').attr('disabled', true);
+                    }else{
+                        $('#preview_single').removeAttr('disabled');
+                    }
+
+                    $(this).find("option").each(function () {
+//
+                        if (this.selected) {
+                            $(this).attr('selected', true);
+
+                        }else{
+                            $(this).removeAttr('selected');
+
+                        }
+                    });
+
+                });
+
+
+                $("#aklamatorPageWidgetID").change(function(){
+
+                    if($(this).val() == 'none'){
+
+                        $('#preview_page').attr('disabled', true);
+                    }else{
+                        $('#preview_page').removeAttr('disabled');
+                    }
+
+                    $(this).find("option").each(function () {
+//
+                        if (this.selected) {
+                            $(this).attr('selected', true);
+                        }else{
+                            $(this).removeAttr('selected');
+
+                        }
+                    });
+
+                });
+
+
 
                 if ($('table').hasClass('dynamicTable')) {
                     $('.dynamicTable').dataTable({
