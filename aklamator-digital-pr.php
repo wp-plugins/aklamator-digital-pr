@@ -174,7 +174,7 @@ class AklamatorWidget
             add_filter('the_content', 'bottom_of_every_post');
         }
 
-        if(get_option('aklamatorFeatured2Feed') == ''){
+        if(get_option('aklamatorFeatured2Feed')){
             update_option('aklamatorFeatured2Feed', 'on');
         }
 
