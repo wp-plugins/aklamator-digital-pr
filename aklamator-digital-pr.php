@@ -3,7 +3,7 @@
 Plugin Name: Aklamator - Digital PR
 Plugin URI: http://www.aklamator.com/wordpress
 Description: Aklamator digital PR service enables you to sell PR announcements, cross promote web sites using RSS feed and provide new services to your clients in digital advertising.
-Version: 1.4.4
+Version: 1.5
 Author: Aklamator
 Author URI: http://www.aklamator.com/
 License: GPL2
@@ -31,6 +31,31 @@ if( !function_exists("aklamator_plugin_settings_link")){
 }
 add_filter("plugin_action_links_".plugin_basename(__FILE__), 'aklamator_plugin_settings_link' );
 
+
+/*
+ * Adds featured images from posts to your site's RSS feed output,
+ */
+
+if(!function_exists('akla_featured_images_in_rss')) {
+    function akla_featured_images_in_rss($content){
+        global $post;
+        if (has_post_thumbnail($post->ID)) {
+            $featured_images_in_rss_size = 'thumbnail';
+            $featured_images_in_rss_css_code = 'display: block; margin-bottom: 5px; clear:both;';
+            $content = get_the_post_thumbnail($post->ID, $featured_images_in_rss_size, array('style' => $featured_images_in_rss_css_code)) . $content;
+        }
+        return $content;
+    }
+}
+
+if(get_option('aklamatorFeatured2Feed')){
+    add_filter('the_excerpt_rss', 'akla_featured_images_in_rss', 1000, 1);
+    add_filter('the_content_feed', 'akla_featured_images_in_rss', 1000, 1);
+}
+
+
+
+
 /*
  * Activation Hook
  */
@@ -43,6 +68,7 @@ function set_up_options(){
     add_option('aklamatorSingleWidgetID', '');
     add_option('aklamatorPageWidgetID', '');
     add_option('aklamatorSingleWidgetTitle', '');
+    add_option('aklamatorFeatured2Feed', 'on');
 }
 
 /*
@@ -57,6 +83,7 @@ function aklamator_uninstall()
     delete_option('aklamatorSingleWidgetID');
     delete_option('aklamatorPageWidgetID');
     delete_option('aklamatorSingleWidgetTitle');
+    delete_option('aklamatorFeatured2Feed');
 }
 
 
@@ -108,7 +135,8 @@ class AklamatorWidget
     {
 
         $this->aklamator_url = "http://aklamator.com/";
-        
+
+
         if (is_admin()) {
             add_action("admin_menu", array(
                 &$this,
@@ -157,6 +185,7 @@ class AklamatorWidget
         register_setting('aklamator-options', 'aklamatorSingleWidgetID');
         register_setting('aklamator-options', 'aklamatorPageWidgetID');
         register_setting('aklamator-options', 'aklamatorSingleWidgetTitle');
+        register_setting('aklamator-options', 'aklamatorFeatured2Feed');
 
     }
 
@@ -336,6 +365,10 @@ class AklamatorWidget
                         <input type="checkbox" id="aklamatorPoweredBy" name="aklamatorPoweredBy" <?php echo (get_option("aklamatorPoweredBy") == true ? 'checked="checked"' : ''); ?> Required="Required">
                         <strong>Required</strong> I acknowledge there is a 'powered by aklamator' link on the widget. <br />
                     </p>
+                    <p>
+                        <input type="checkbox" id="aklamatorFeatured2Feed" name="aklamatorFeatured2Feed" <?php echo (get_option("aklamatorFeatured2Feed") == true ? 'checked="checked"' : ''); ?> >
+                        <strong>Add featured</strong> images from posts to your site's RSS feed output
+                    </p>
                     <?php if($this->api_data->flag === false): ?>
                         <p><span style="color:red"><?php echo $this->api_data->error; ?></span></p>
                     <?php endif; ?>
@@ -475,22 +508,8 @@ class AklamatorWidget
 
             function myFunction(widget_id) {
 
-                var myWindow = window.open("", "myWindow", "width=900, height=430, top=200, left=500");
+                var myWindow = window.open('<?php echo $this->aklamator_url;?>show/widget/'+widget_id);
 
-                tekst = '<div style="margin: 50px 0px" id="akla' + widget_id + '"></div>';
-                tekst += '<script>(function(d, s, id) {';
-                tekst += 'var js, fjs = d.getElementsByTagName(s)[0];';
-                tekst += 'if (d.getElementById(id)) return;';
-                tekst += 'js = d.createElement(s); js.id = id;';
-                tekst += 'js.src = "http://aklamator.com/widget/' + widget_id + '";';
-                tekst += 'fjs.parentNode.insertBefore(js, fjs);';
-                tekst += '}(document, \'script\', \'aklamator-' + widget_id + '\'))<\/script>';
-                tekst += '<hr><b>Widget doesn\'t show expected thumbnail or image? </b><br>' +
-                'Please note that Aklamator gets first image or YouTube thumbnail for each item in your feed. <br> If there is no image or YouTube video in your feed, Aklamator will show default image. Please check your feed! <br><br> <b>Tip:</b> images should be square. We are offering image resizing and caching service, please <a href="http://aklamator.com/support/ticket" target="_blank">contact us.</a>';
-
-                myWindow.document.write('');
-                myWindow.document.close();
-                myWindow.document.write(tekst);
                 myWindow.focus();
 
             }
@@ -586,7 +605,10 @@ class Wp_widget_aklamator extends WP_Widget {
         'content' => '',
     );
 
+    public $aklamator_url = 'http://aklamator.com/';
 
+
+    public $widget_data;
 
     public function __construct() {
         // widget actual processes
@@ -596,8 +618,9 @@ class Wp_widget_aklamator extends WP_Widget {
             array( 'description' => __( 'Display Aklamator Widgets in Sidebar')) // Widget Description
         );
 
-
     }
+
+
 
     function widget( $args, $instance ) {
         extract($args);
@@ -631,7 +654,7 @@ class Wp_widget_aklamator extends WP_Widget {
                 var js, fjs = d.getElementsByTagName(s)[0];
                 if (d.getElementById(id)) return;
                 js = d.createElement(s); js.id = id;
-                js.src = "http://aklamator.com/widget/<?php echo $widget_id; ?>";
+                js.src = "<?php echo $this->aklamator_url; ?>widget/<?php echo $widget_id; ?>";
                 fjs.parentNode.insertBefore(js, fjs);
             }(document, 'script', 'aklamator-<?php echo $widget_id; ?>'));</script>
         <!-- end -->
@@ -639,7 +662,9 @@ class Wp_widget_aklamator extends WP_Widget {
 
     function form( $instance ) {
 
-        $widget_data = new AklamatorWidget();
+        $widget = new AklamatorWidget();
+        $this->aklamator_url = $widget->aklamator_url;
+        $this->widget_data = $widget->api_data;
 
         $instance = wp_parse_args( (array) $instance, $this->default );
 
@@ -649,7 +674,7 @@ class Wp_widget_aklamator extends WP_Widget {
         $widget_id = $instance['widget_id'];
 
 
-        if($widget_data->api_data->flag && !empty($widget_data->api_data->data)): ?>
+        if($this->widget_data->flag && !empty($this->widget_data->data)): ?>
 
             <!-- title -->
             <p>
@@ -660,7 +685,7 @@ class Wp_widget_aklamator extends WP_Widget {
             <!-- Select - dropdown -->
             <label for="<?php echo $this->get_field_id('widget_id'); ?>"><?php _e('Widget:','envirra-backend'); ?></label>
             <select id="<?php echo $this->get_field_id('widget_id'); ?>" name="<?php echo $this->get_field_name('widget_id'); ?>">
-                <?php foreach ( $widget_data->api_data->data as $item ): ?>
+                <?php foreach ( $this->widget_data->data as $item ): ?>
                     <option <?php echo ($widget_id == $item->uniq_name)? 'selected="selected"' : '' ;?> value="<?php echo $item->uniq_name; ?>"><?php echo $item->title; ?></option>
                 <?php endforeach; ?>
             </select>
