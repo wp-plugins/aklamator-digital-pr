@@ -3,8 +3,8 @@ Contributors: (aklamator)
 Donate link: http://www.aklamator.com/
 Tags: adSense, custom ad, ads, aklamator.com, aklamator, aclamator, digital pr, widget, widgets, content promotion, earn, income, statistic, tracking, cross promotion, Technorati, ContextWeb, Amazon Associates, Chitika, Tribal Fusion, Propeller Ads Media, Adversal, Revenue Hits, AdWords, Ad Sense, crosspromote
 Requires at least: 3.0.1
-Tested up to: 4.2.2
-Stable tag: 1.5.1
+Tested up to: 4.2.3
+Stable tag: 1.6
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -102,6 +102,10 @@ Yes you can! But one widget can only be placed once per page, so use multiple wi
 5. How the aklamator widget looks like?
 
 == Changelog ==
+
+= 1.6 =
+* Added please "rate and review" link in plugin section
+* Tested up to 4.2.3 (newest wp version)
 
 = 1.5.1 =
 * Patch for existing users
