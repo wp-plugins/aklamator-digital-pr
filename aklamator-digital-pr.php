@@ -3,7 +3,7 @@
 Plugin Name: Aklamator - Digital PR
 Plugin URI: http://www.aklamator.com/wordpress
 Description: Aklamator digital PR service enables you to sell PR announcements, cross promote web sites using RSS feed and provide new services to your clients in digital advertising.
-Version: 1.6
+Version: 1.7
 Author: Aklamator
 Author URI: http://www.aklamator.com/
 License: GPL2
@@ -489,9 +489,11 @@ class AklamatorWidget
                         <td style="vertical-align: middle"><div style="float: left; margin-right: 10px" class="button-group">
                                 <input type="button" class="button primary big submit" onclick="myFunction('<?php echo $item->uniq_name; ?>')" value="Preview Widget">
                         </td>
-                        <td style="vertical-align: middle;" ><?php echo $item->img_size; ?>px</td>
-                        <td style="vertical-align: middle;" ><?php echo $item->column_number; ?> x <?php echo $item->row_number; ?></td>
+                        <td style="vertical-align: middle;" ><?php echo "<a href = \"$this->aklamator_url"."widget/edit/$item->id\" target='_blank' title='Click & Login to change'>$item->img_size px</a>";  ?></td>
+                        <td style="vertical-align: middle;" ><?php echo "<a href = \"$this->aklamator_url"."widget/edit/$item->id\" target='_blank' title='Click & Login to change'>".$item->column_number ." x ". $item->row_number."</a>"; ?></td>
                         <td style="vertical-align: middle;" ><?php echo $item->date_created; ?></td>
+
+
                     </tr>
                 <?php endforeach; ?>
 
