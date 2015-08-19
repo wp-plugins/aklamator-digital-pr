@@ -3,7 +3,7 @@
 Plugin Name: Aklamator - Digital PR
 Plugin URI: http://www.aklamator.com/wordpress
 Description: Aklamator digital PR service enables you to sell PR announcements, cross promote web sites using RSS feed and provide new services to your clients in digital advertising.
-Version: 1.8
+Version: 1.9
 Author: Aklamator
 Author URI: http://www.aklamator.com/
 License: GPL2
@@ -323,13 +323,14 @@ class AklamatorWidget
             .btn-primary:Active, .btn-primary.pressed { background: #1ac6ff; border:1px solid #1ac6ff; }
 
             .box{float: left; margin-left: 10px; width: 500px; background-color:#f8f8f8; padding: 10px; border-radius: 5px;}
+            .right_sidebar{float: right; margin-left: 10px; width: 300px; background-color:#f8f8f8; padding: 10px; border-radius: 5px;}
 
         </style>
         <!-- Load css libraries -->
 
         <link href="//cdn.datatables.net/1.10.5/css/jquery.dataTables.min.css" rel="stylesheet" type="text/css">
 
-        <div id="aklamator-options" style="width:880px;margin-top:10px;">
+        <div id="aklamator-options" style="width:1160px;margin-top:10px;">
 
             <div style="float: left; width: 300px;">
                     
@@ -345,10 +346,10 @@ class AklamatorWidget
                 <a target="_blank" href="<?php echo $ak_home_url;?>/contact?utm_source=wp-plugin-contact">
                     <img style="border:0px;margin-top:5px; margin-bottom:5px;border-radius:5px;" src="<?php echo plugins_url('images/support.jpg', __FILE__); ?>" /></a>
 
-                <a target="_blank" href="http://qr.rs/q/4649f">
-                    <img style="border:0px;margin-top:5px; margin-bottom:5px;border-radius:5px;" src="<?php echo plugins_url('images/promo-300x200.png', __FILE__); ?>" /></a>
+                <a target="_blank" href="http://qr.rs/q/4649f"><img style="border:0px;margin-top:5px; margin-bottom:5px;border-radius:5px;" src="<?php echo plugins_url('images/promo-300x200.png', __FILE__); ?>" /></a>
 
             </div>
+
             <div class="box">
 
                 <h1>Aklamator Digital PR</h1>
@@ -444,7 +445,12 @@ class AklamatorWidget
 
             </form>
             </div>
-
+            <!-- right sidebar -->
+            <div class="right_sidebar">
+                <h3 style="text-align: center">Watch Walk-through tutorial</h3>
+                <iframe width="300" height="225" src="https://www.youtube.com/embed/cCh-ayz6z5E?rel=0" frameborder="0" allowfullscreen></iframe>
+            </div>
+            <!-- End Right sidebar -->
         </div>
 
         <div style="clear:both"></div>

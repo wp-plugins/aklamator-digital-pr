@@ -4,7 +4,7 @@ Donate link: http://www.aklamator.com/
 Tags: adSense, custom ad, ads, aklamator.com, aklamator, aclamator, digital pr, widget, widgets, content promotion, earn, income, statistic, tracking, cross promotion, Technorati, ContextWeb, Amazon Associates, Chitika, Tribal Fusion, Propeller Ads Media, Adversal, Revenue Hits, AdWords, Ad Sense, crosspromote
 Requires at least: 3.0.1
 Tested up to: 4.3
-Stable tag: 1.8
+Stable tag: 1.9
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -18,6 +18,10 @@ Aklamator is free web service that enables you to start selling digital PR space
 
 Each position on your website is called Aklamator widget. Each widget can contain several media releases. If you did not add any media release to your website, aklamator will populate media releases from your chosen RSS feed.
 This will enable you to retain visitors on your website and optionally cross promote your websites.
+
+**Heed help with Aklamator?, check Walkthrough video tutorial:**
+
+[youtube https://www.youtube.com/watch?v=cCh-ayz6z5E]
 
 **What Aklamator do not do?**
 
@@ -103,7 +107,10 @@ Yes you can! But one widget can only be placed once per page, so use multiple wi
 
 == Changelog ==
 
-= 1.7 =
+= 1.9 =
+* Added Walkthrough video tutorial
+
+= 1.8 =
 * Tested up to 4.3 (newest wp version)
 
 = 1.7 =
