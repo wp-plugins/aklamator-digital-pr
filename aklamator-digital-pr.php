@@ -1,11 +1,11 @@
 <?php
 /*
 Plugin Name: Aklamator - Digital PR
-Plugin URI: http://www.aklamator.com/wordpress
+Plugin URI: https://www.aklamator.com/wordpress
 Description: Aklamator digital PR service enables you to sell PR announcements, cross promote web sites using RSS feed and provide new services to your clients in digital advertising.
-Version: 1.9.1
+Version: 1.9.2
 Author: Aklamator
-Author URI: http://www.aklamator.com/
+Author URI: https://www.aklamator.com/
 License: GPL2
 
 Copyright 2015 Aklamator.com (email : info@aklamator.com)
@@ -136,7 +136,7 @@ if( !function_exists("bottom_of_every_post")){
             var js, fjs = d.getElementsByTagName(s)[0];
             if (d.getElementById(id)) return;
             js = d.createElement(s); js.id = id;
-            js.src = \"http://aklamator.com/widget/$widget_id\";
+            js.src = \"https://aklamator.com/widget/$widget_id\";
             fjs.parentNode.insertBefore(js, fjs);
          }(document, 'script', 'aklamator-$widget_id'));</script>
         <!-- end -->" . "<br>";  
@@ -153,7 +153,7 @@ class AklamatorWidget
     public function __construct()
     {
 
-        $this->aklamator_url = "http://aklamator.com/";
+        $this->aklamator_url = "https://aklamator.com/";
 
 
         if (is_admin()) {
@@ -274,8 +274,6 @@ class AklamatorWidget
     public function createAdminPage()
     {
         $code = get_option('aklamatorApplicationID');
-        $ak_home_url = 'http://aklamator.com';
-        $ak_dashboard_url = 'http://aklamator.com/dashboard';
 
         ?>
         <style>
@@ -334,16 +332,16 @@ class AklamatorWidget
 
             <div style="float: left; width: 300px;">
                     
-                <a target="_blank" href="<?php echo $ak_home_url; ?>?utm_source=wp-plugin">
+                <a target="_blank" href="<?php echo $this->aklamator_url; ?>?utm_source=wp-plugin">
                     <img style="border-radius:5px;border:0px;" src=" <?php echo plugins_url('images/logo.jpg', __FILE__);?>" /></a>
                 <?php
                 if ($code != '') : ?>
-                    <a target="_blank" href="<?php echo $ak_dashboard_url; ?>?utm_source=wp-plugin">
+                    <a target="_blank" href="<?php echo $this->aklamator_url; ?>dashboard?utm_source=wp-plugin">
                         <img style="border:0px;margin-top:5px;border-radius:5px;" src="<?php echo plugins_url('images/dashboard.jpg', __FILE__); ?>" /></a>
 
                 <?php endif; ?>
 
-                <a target="_blank" href="<?php echo $ak_home_url;?>/contact?utm_source=wp-plugin-contact">
+                <a target="_blank" href="<?php echo $this->aklamator_url;?>contact?utm_source=wp-plugin-contact">
                     <img style="border:0px;margin-top:5px; margin-bottom:5px;border-radius:5px;" src="<?php echo plugins_url('images/support.jpg', __FILE__); ?>" /></a>
 
                 <a target="_blank" href="http://qr.rs/q/4649f"><img style="border:0px;margin-top:5px; margin-bottom:5px;border-radius:5px;" src="<?php echo plugins_url('images/promo-300x200.png', __FILE__); ?>" /></a>
@@ -468,7 +466,7 @@ class AklamatorWidget
             <!-- Start of dataTables -->
             <div id="aklamatorPro-options">
                 <h1>Your Widgets</h1>
-                <div>In order to add new widgets or change dimensions please <a href="http://aklamator.com/login" target="_blank">login to aklamator</a></div>
+                <div>In order to add new widgets or change dimensions please <a href="<?php echo $this->aklamator_url ;?>login" target="_blank">login to aklamator</a></div>
             </div>
             <br>
             <table cellpadding="0" cellspacing="0" border="0"
@@ -525,7 +523,7 @@ class AklamatorWidget
 
         <!-- load js scripts -->
 
-        <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+        <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
         <script type="text/javascript" src="<?php echo content_url(); ?>/plugins/aklamator-digital-pr/assets/dataTables/jquery.dataTables.min.js"></script>
 
 
@@ -637,7 +635,7 @@ class Wp_widget_aklamator extends WP_Widget {
         'content' => '',
     );
 
-    public $aklamator_url = 'http://aklamator.com/';
+    public $aklamator_url = 'https://aklamator.com/';
 
 
     public $widget_data;
