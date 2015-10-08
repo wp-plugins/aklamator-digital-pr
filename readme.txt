@@ -1,10 +1,10 @@
 === Plugin Name ===
 Contributors: (aklamator)
-Donate link: http://www.aklamator.com/
+Donate link: https://www.aklamator.com/
 Tags: adSense, custom ad, ads, aklamator.com, aklamator, aclamator, digital pr, widget, widgets, content promotion, earn, income, statistic, tracking, cross promotion, Technorati, ContextWeb, Amazon Associates, Chitika, Tribal Fusion, Propeller Ads Media, Adversal, Revenue Hits, AdWords, Ad Sense, crosspromote
 Requires at least: 3.0.1
-Tested up to: 4.2.2
-Stable tag: 1.4.1
+Tested up to: 4.3.1
+Stable tag: 1.9.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -19,6 +19,10 @@ Aklamator is free web service that enables you to start selling digital PR space
 Each position on your website is called Aklamator widget. Each widget can contain several media releases. If you did not add any media release to your website, aklamator will populate media releases from your chosen RSS feed.
 This will enable you to retain visitors on your website and optionally cross promote your websites.
 
+**Need help with Aklamator? Check Walkthrough video tutorial:**
+
+[youtube https://www.youtube.com/watch?v=cCh-ayz6z5E]
+
 **What Aklamator do not do?**
 
 Aklamator will not push you media releases from other websites.
@@ -32,29 +36,29 @@ Our service enables you to track statistics of views and clicks for each widget 
 
 **See recommendations how to make successful media releases**
 
-[Media release recommendation >>](http://aklamator.com/pdf/aklamator-digital-pr-bestpractice-en.pdf)
+[Media release recommendation >>](https://aklamator.com/pdf/aklamator-digital-pr-bestpractice-en.pdf)
 
 == Installation ==
 
-[Step by step instructions >>](http://www.aklamator.com/wordpress?utm_source=wordpress&utm_medium=store&utm_campaign=wordpress)
+[Step by step instructions >>](https://www.aklamator.com/wordpress?utm_source=wordpress&utm_medium=store&utm_campaign=wordpress)
 
 **How to activate and use Aklamator on your wordpress website**
 
 If already have registered Aklamator account and own website that is using Wordpress please skip to step 2
 
-**1. step** : [Sign Up] (http://aklamator.com/registration/publisher "Aklamator Digital PR Sign up") Aklamator and get free Aklamator account and Aklamator Application ID.
+**1. step** : [Sign Up](https://aklamator.com/registration/publisher) Aklamator and get free Aklamator account and Aklamator Application ID.
 
 Fill your information and click “Create new account”
 You will get verification email with activation link
-(please check SPAM folder if it is missing).  After activating your account proceed to login to Aklamator.
+(please check SPAM folder if it is missing). After activating your account proceed to login to Aklamator.
 
-**2. step** : [Sign in] (http://aklamator.com/login) and get your Aklamator Application ID
+**2. step** : [Sign in](https://aklamator.com/login) and get your Aklamator Application ID
 
 After logging in, go to your profile and copy Application ID
 
 After pasting Application ID to your wordpress plugin, it will automatically create first plugin for your blog and populate it with your RSS feed.
 It becomes visible in plugin settings (list below).
-Widget is 4x1 150x150px. If you want to change widget dimensions you can do that by logging to [Aklamator web] (http://aklamator.com/login)
+Widget is 4x1 150x150px. If you want to change widget dimensions you can do that by logging to [Aklamator web](https://aklamator.com/login)
 
 **3. step** : Download Aklamator wordpress plugin and paste your Aklamator Application ID
 
@@ -67,13 +71,13 @@ Go to your WordPress administration panel and paste the Aklamator Application ID
 
 * Go to Appearance then Widgets and drag and drop Aklamator Digital PR field and choose desired widget
 
-Now you can [Log in] (http://aklamator.com/login) to the Aklamator and create more widgets and add RSS feed to populate them with media releases. Later you could add paid media releases and their target number of clicks.
+Now you can [Log in](https://aklamator.com/login) to the Aklamator and create more widgets and add RSS feed to populate them with media releases. Later you could add paid media releases and their target number of clicks.
 
-To track statistics and for get additional configuration, please [login] (http://aklamator.com/login) to Aklamator website.
+To track statistics and for get additional configuration, please [login](https://aklamator.com/login) to Aklamator website.
 
 ####Questions? Contact us!####
 
-[Click here for customer support >>](http://www.aklamator.com)
+[Click here for customer support >>](https://www.aklamator.com)
 
 
 == Frequently Asked Questions ==
@@ -88,7 +92,7 @@ Go to plugin configuration and check if the widget for single page post is set o
 
 = Where can I add my RSS feed =
 
-[login] (http://aklamator.com/login) to aklamator and add or edit your widget. There you can add your RSS feed URL to your widget. Aklamator supports multiple RSS feeds per widget.
+[login](https://aklamator.com/login) to aklamator and add or edit your widget. There you can add your RSS feed URL to your widget. Aklamator supports multiple RSS feeds per widget.
 
 = Can I serve multiple aklamator widgets on same page =
 Yes you can! But one widget can only be placed once per page, so use multiple widgets.
@@ -102,6 +106,41 @@ Yes you can! But one widget can only be placed once per page, so use multiple wi
 5. How the aklamator widget looks like?
 
 == Changelog ==
+
+= 1.9.2 =
+* Edited all URL's to have https prefix
+
+= 1.9.1 =
+* Added Benefits & Cross promotion tool video tutorial
+
+= 1.9 =
+* Added Walkthrough video tutorial
+
+= 1.8 =
+* Tested up to 4.3 (newest wp version)
+
+= 1.7 =
+* Added option for easy change of image dimensions and widget dimensions
+
+= 1.6 =
+* Added please "rate and review" link in plugin section
+* Tested up to 4.2.3 (newest wp version)
+
+= 1.5.1 =
+* Patch for existing users
+
+= 1.5 =
+* Option to add featured images to your site's RSS feed output and show them on Aklamator widget
+
+= 1.4.4 =
+* Better preview window
+
+= 1.4.3 =
+* Added additional information in preview window
+* Minor bug fix
+
+= 1.4.2 =
+* Initial widget for wordpress users created with account creation
 
 = 1.4.1 =
 * Promotion - Added discount on premium accounts and tested up to 4.2.2.

@@ -1,11 +1,11 @@
 <?php
 /*
 Plugin Name: Aklamator - Digital PR
-Plugin URI: http://www.aklamator.com/wordpress
+Plugin URI: https://www.aklamator.com/wordpress
 Description: Aklamator digital PR service enables you to sell PR announcements, cross promote web sites using RSS feed and provide new services to your clients in digital advertising.
-Version: 1.4.1
+Version: 1.9.2
 Author: Aklamator
-Author URI: http://www.aklamator.com/
+Author URI: https://www.aklamator.com/
 License: GPL2
 
 Copyright 2015 Aklamator.com (email : info@aklamator.com)
@@ -32,6 +32,50 @@ if( !function_exists("aklamator_plugin_settings_link")){
 add_filter("plugin_action_links_".plugin_basename(__FILE__), 'aklamator_plugin_settings_link' );
 
 /*
+ * Add rate and review link in plugin section
+ */
+if( !function_exists("aklamator_plugin_meta_links")) {
+    function aklamator_plugin_meta_links($links, $file)
+    {
+        $plugin = plugin_basename(__FILE__);
+        // create link
+        if ($file == $plugin) {
+            return array_merge(
+                $links,
+                array('<a href="https://wordpress.org/support/view/plugin-reviews/aklamator-digital-pr" target=_blank>Please rate and review</a>')
+            );
+        }
+        return $links;
+    }
+}
+add_filter( 'plugin_row_meta', 'aklamator_plugin_meta_links', 10, 2);
+
+
+/*
+ * Adds featured images from posts to your site's RSS feed output,
+ */
+
+if(!function_exists('akla_featured_images_in_rss')) {
+    function akla_featured_images_in_rss($content){
+        global $post;
+        if (has_post_thumbnail($post->ID)) {
+            $featured_images_in_rss_size = 'thumbnail';
+            $featured_images_in_rss_css_code = 'display: block; margin-bottom: 5px; clear:both;';
+            $content = get_the_post_thumbnail($post->ID, $featured_images_in_rss_size, array('style' => $featured_images_in_rss_css_code)) . $content;
+        }
+        return $content;
+    }
+}
+
+if(get_option('aklamatorFeatured2Feed')){
+    add_filter('the_excerpt_rss', 'akla_featured_images_in_rss', 1000, 1);
+    add_filter('the_content_feed', 'akla_featured_images_in_rss', 1000, 1);
+}
+
+
+
+
+/*
  * Activation Hook
  */
 
@@ -43,6 +87,7 @@ function set_up_options(){
     add_option('aklamatorSingleWidgetID', '');
     add_option('aklamatorPageWidgetID', '');
     add_option('aklamatorSingleWidgetTitle', '');
+    add_option('aklamatorFeatured2Feed', 'on');
 }
 
 /*
@@ -57,6 +102,7 @@ function aklamator_uninstall()
     delete_option('aklamatorSingleWidgetID');
     delete_option('aklamatorPageWidgetID');
     delete_option('aklamatorSingleWidgetTitle');
+    delete_option('aklamatorFeatured2Feed');
 }
 
 
@@ -90,7 +136,7 @@ if( !function_exists("bottom_of_every_post")){
             var js, fjs = d.getElementsByTagName(s)[0];
             if (d.getElementById(id)) return;
             js = d.createElement(s); js.id = id;
-            js.src = \"http://aklamator.com/widget/$widget_id\";
+            js.src = \"https://aklamator.com/widget/$widget_id\";
             fjs.parentNode.insertBefore(js, fjs);
          }(document, 'script', 'aklamator-$widget_id'));</script>
         <!-- end -->" . "<br>";  
@@ -107,8 +153,9 @@ class AklamatorWidget
     public function __construct()
     {
 
-        $this->aklamator_url = "http://aklamator.com/";
-        
+        $this->aklamator_url = "https://aklamator.com/";
+
+
         if (is_admin()) {
             add_action("admin_menu", array(
                 &$this,
@@ -146,7 +193,9 @@ class AklamatorWidget
             add_filter('the_content', 'bottom_of_every_post');
         }
 
-
+        if(get_option('aklamatorFeatured2Feed')){
+            update_option('aklamatorFeatured2Feed', 'on');
+        }
 
     }
 
@@ -157,6 +206,7 @@ class AklamatorWidget
         register_setting('aklamator-options', 'aklamatorSingleWidgetID');
         register_setting('aklamator-options', 'aklamatorPageWidgetID');
         register_setting('aklamator-options', 'aklamatorSingleWidgetTitle');
+        register_setting('aklamator-options', 'aklamatorFeatured2Feed');
 
     }
 
@@ -175,7 +225,7 @@ class AklamatorWidget
     {
         
         return $this->aklamator_url . 'registration/publisher?utm_source=wordpress&utm_medium=admin&e=' . urlencode(get_option('admin_email')) . '&pub=' .  preg_replace('/^www\./','',$_SERVER['SERVER_NAME']).
-        '&un=' . urlencode(wp_get_current_user()->display_name);
+        '&un=' . urlencode(wp_get_current_user()->display_name).'&domain='.site_url();
 
     }
 
@@ -224,8 +274,6 @@ class AklamatorWidget
     public function createAdminPage()
     {
         $code = get_option('aklamatorApplicationID');
-        $ak_home_url = 'http://aklamator.com';
-        $ak_dashboard_url = 'http://aklamator.com/dashboard';
 
         ?>
         <style>
@@ -273,32 +321,33 @@ class AklamatorWidget
             .btn-primary:Active, .btn-primary.pressed { background: #1ac6ff; border:1px solid #1ac6ff; }
 
             .box{float: left; margin-left: 10px; width: 500px; background-color:#f8f8f8; padding: 10px; border-radius: 5px;}
+            .right_sidebar{float: right; margin-left: 10px; width: 300px; background-color:#f8f8f8; padding: 10px; border-radius: 5px;}
 
         </style>
         <!-- Load css libraries -->
 
         <link href="//cdn.datatables.net/1.10.5/css/jquery.dataTables.min.css" rel="stylesheet" type="text/css">
 
-        <div id="aklamator-options" style="width:880px;margin-top:10px;">
+        <div id="aklamator-options" style="width:1160px;margin-top:10px;">
 
             <div style="float: left; width: 300px;">
                     
-                <a target="_blank" href="<?php echo $ak_home_url; ?>?utm_source=wp-plugin">
+                <a target="_blank" href="<?php echo $this->aklamator_url; ?>?utm_source=wp-plugin">
                     <img style="border-radius:5px;border:0px;" src=" <?php echo plugins_url('images/logo.jpg', __FILE__);?>" /></a>
                 <?php
                 if ($code != '') : ?>
-                    <a target="_blank" href="<?php echo $ak_dashboard_url; ?>?utm_source=wp-plugin">
+                    <a target="_blank" href="<?php echo $this->aklamator_url; ?>dashboard?utm_source=wp-plugin">
                         <img style="border:0px;margin-top:5px;border-radius:5px;" src="<?php echo plugins_url('images/dashboard.jpg', __FILE__); ?>" /></a>
 
                 <?php endif; ?>
 
-                <a target="_blank" href="<?php echo $ak_home_url;?>/contact?utm_source=wp-plugin-contact">
+                <a target="_blank" href="<?php echo $this->aklamator_url;?>contact?utm_source=wp-plugin-contact">
                     <img style="border:0px;margin-top:5px; margin-bottom:5px;border-radius:5px;" src="<?php echo plugins_url('images/support.jpg', __FILE__); ?>" /></a>
 
-                <a target="_blank" href="http://qr.rs/q/4649f">
-                    <img style="border:0px;margin-top:5px; margin-bottom:5px;border-radius:5px;" src="<?php echo plugins_url('images/promo-300x200.png', __FILE__); ?>" /></a>
+                <a target="_blank" href="http://qr.rs/q/4649f"><img style="border:0px;margin-top:5px; margin-bottom:5px;border-radius:5px;" src="<?php echo plugins_url('images/promo-300x200.png', __FILE__); ?>" /></a>
 
             </div>
+
             <div class="box">
 
                 <h1>Aklamator Digital PR</h1>
@@ -336,6 +385,10 @@ class AklamatorWidget
                         <input type="checkbox" id="aklamatorPoweredBy" name="aklamatorPoweredBy" <?php echo (get_option("aklamatorPoweredBy") == true ? 'checked="checked"' : ''); ?> Required="Required">
                         <strong>Required</strong> I acknowledge there is a 'powered by aklamator' link on the widget. <br />
                     </p>
+                    <p>
+                        <input type="checkbox" id="aklamatorFeatured2Feed" name="aklamatorFeatured2Feed" <?php echo (get_option("aklamatorFeatured2Feed") == true ? 'checked="checked"' : ''); ?> >
+                        <strong>Add featured</strong> images from posts to your site's RSS feed output
+                    </p>
                     <?php if($this->api_data->flag === false): ?>
                         <p><span style="color:red"><?php echo $this->api_data->error; ?></span></p>
                     <?php endif; ?>
@@ -368,7 +421,7 @@ class AklamatorWidget
                             <option <?php echo (get_option('aklamatorSingleWidgetID') == $item->uniq_name)? 'selected="selected"' : '' ;?> value="<?php echo $item->uniq_name; ?>"><?php echo $item->title; ?></option>
                         <?php endforeach; ?>
                     </select>
-                    <input style="margin-left: 5px;" type="button" class="button primary big submit" onclick="myFunction($('#aklamatorSingleWidgetID option[selected]').val())" value="Preview">
+                    <input style="margin-left: 5px;" id="preview_single" type="button" class="button primary big submit" onclick="myFunction($('#aklamatorSingleWidgetID option[selected]').val())" value="Preview" <?php echo get_option('aklamatorSingleWidgetID')=="none"? "disabled" :"" ;?>>
                     </p>
 
                     <p>
@@ -379,7 +432,7 @@ class AklamatorWidget
                                 <option <?php echo (get_option('aklamatorPageWidgetID') == $item->uniq_name)? 'selected="selected"' : '' ;?> value="<?php echo $item->uniq_name; ?>"><?php echo $item->title; ?></option>
                             <?php endforeach; ?>
                         </select>
-                        <input style="margin-left: 5px;" type="button" class="button primary big submit" onclick="myFunction($('#aklamatorPageWidgetID option[selected]').val())" value="Preview">
+                        <input style="margin-left: 5px;" type="button" id="preview_page" class="button primary big submit" onclick="myFunction($('#aklamatorPageWidgetID option[selected]').val())" value="Preview" <?php echo get_option('aklamatorPageWidgetID')=="none"? "disabled" :"" ;?>>
 
                     </p>
 
@@ -390,7 +443,15 @@ class AklamatorWidget
 
             </form>
             </div>
+            <!-- right sidebar -->
+            <div class="right_sidebar">
+                <h3 style="text-align: center">Watch Walk-through tutorial</h3>
+                <iframe width="300" height="225" src="https://www.youtube.com/embed/cCh-ayz6z5E?rel=0" frameborder="0" allowfullscreen></iframe>
 
+                <h3 style="text-align: center">Benefits & Cross promotion tool</h3>
+                <iframe width="300" height="225" src="https://www.youtube.com/embed/NA_yWJneYkI?rel=0" frameborder="0" allowfullscreen></iframe>
+            </div>
+            <!-- End Right sidebar -->
         </div>
 
         <div style="clear:both"></div>
@@ -405,7 +466,7 @@ class AklamatorWidget
             <!-- Start of dataTables -->
             <div id="aklamatorPro-options">
                 <h1>Your Widgets</h1>
-                <div>In order to add new widgets or change dimensions please <a href="http://aklamator.com/login" target="_blank">login to aklamator</a></div>
+                <div>In order to add new widgets or change dimensions please <a href="<?php echo $this->aklamator_url ;?>login" target="_blank">login to aklamator</a></div>
             </div>
             <br>
             <table cellpadding="0" cellspacing="0" border="0"
@@ -435,9 +496,11 @@ class AklamatorWidget
                         <td style="vertical-align: middle"><div style="float: left; margin-right: 10px" class="button-group">
                                 <input type="button" class="button primary big submit" onclick="myFunction('<?php echo $item->uniq_name; ?>')" value="Preview Widget">
                         </td>
-                        <td style="vertical-align: middle;" ><?php echo $item->img_size; ?>px</td>
-                        <td style="vertical-align: middle;" ><?php echo $item->column_number; ?> x <?php echo $item->row_number; ?></td>
+                        <td style="vertical-align: middle;" ><?php echo "<a href = \"$this->aklamator_url"."widget/edit/$item->id\" target='_blank' title='Click & Login to change'>$item->img_size px</a>";  ?></td>
+                        <td style="vertical-align: middle;" ><?php echo "<a href = \"$this->aklamator_url"."widget/edit/$item->id\" target='_blank' title='Click & Login to change'>".$item->column_number ." x ". $item->row_number."</a>"; ?></td>
                         <td style="vertical-align: middle;" ><?php echo $item->date_created; ?></td>
+
+
                     </tr>
                 <?php endforeach; ?>
 
@@ -460,7 +523,7 @@ class AklamatorWidget
 
         <!-- load js scripts -->
 
-        <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+        <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
         <script type="text/javascript" src="<?php echo content_url(); ?>/plugins/aklamator-digital-pr/assets/dataTables/jquery.dataTables.min.js"></script>
 
 
@@ -475,25 +538,59 @@ class AklamatorWidget
 
             function myFunction(widget_id) {
 
-                var myWindow = window.open("", "myWindow", "width=900, height=400, top=200, left=500");
+                var myWindow = window.open('<?php echo $this->aklamator_url;?>show/widget/'+widget_id);
 
-                tekst = '<div style="margin: 50px 0px" id="akla' + widget_id + '"></div>';
-                tekst += '<script>(function(d, s, id) {';
-                tekst += 'var js, fjs = d.getElementsByTagName(s)[0];';
-                tekst += 'if (d.getElementById(id)) return;';
-                tekst += 'js = d.createElement(s); js.id = id;';
-                tekst += 'js.src = "http://aklamator.com/widget/' + widget_id + '";';
-                tekst += 'fjs.parentNode.insertBefore(js, fjs);';
-                tekst += '}(document, \'script\', \'aklamator-' + widget_id + '\'))<\/script>';
-
-                myWindow.document.write('');
-                myWindow.document.close();
-                myWindow.document.write(tekst);
                 myWindow.focus();
 
             }
 
             $(document).ready(function(){
+
+
+                $("#aklamatorSingleWidgetID").change(function(){
+
+                    if($(this).val() == 'none'){
+                        $('#preview_single').attr('disabled', true);
+                    }else{
+                        $('#preview_single').removeAttr('disabled');
+                    }
+
+                    $(this).find("option").each(function () {
+//
+                        if (this.selected) {
+                            $(this).attr('selected', true);
+
+                        }else{
+                            $(this).removeAttr('selected');
+
+                        }
+                    });
+
+                });
+
+
+                $("#aklamatorPageWidgetID").change(function(){
+
+                    if($(this).val() == 'none'){
+
+                        $('#preview_page').attr('disabled', true);
+                    }else{
+                        $('#preview_page').removeAttr('disabled');
+                    }
+
+                    $(this).find("option").each(function () {
+//
+                        if (this.selected) {
+                            $(this).attr('selected', true);
+                        }else{
+                            $(this).removeAttr('selected');
+
+                        }
+                    });
+
+                });
+
+
 
                 if ($('table').hasClass('dynamicTable')) {
                     $('.dynamicTable').dataTable({
@@ -538,7 +635,10 @@ class Wp_widget_aklamator extends WP_Widget {
         'content' => '',
     );
 
+    public $aklamator_url = 'https://aklamator.com/';
 
+
+    public $widget_data;
 
     public function __construct() {
         // widget actual processes
@@ -548,8 +648,9 @@ class Wp_widget_aklamator extends WP_Widget {
             array( 'description' => __( 'Display Aklamator Widgets in Sidebar')) // Widget Description
         );
 
-
     }
+
+
 
     function widget( $args, $instance ) {
         extract($args);
@@ -583,7 +684,7 @@ class Wp_widget_aklamator extends WP_Widget {
                 var js, fjs = d.getElementsByTagName(s)[0];
                 if (d.getElementById(id)) return;
                 js = d.createElement(s); js.id = id;
-                js.src = "http://aklamator.com/widget/<?php echo $widget_id; ?>";
+                js.src = "<?php echo $this->aklamator_url; ?>widget/<?php echo $widget_id; ?>";
                 fjs.parentNode.insertBefore(js, fjs);
             }(document, 'script', 'aklamator-<?php echo $widget_id; ?>'));</script>
         <!-- end -->
@@ -591,7 +692,9 @@ class Wp_widget_aklamator extends WP_Widget {
 
     function form( $instance ) {
 
-        $widget_data = new AklamatorWidget();
+        $widget = new AklamatorWidget();
+        $this->aklamator_url = $widget->aklamator_url;
+        $this->widget_data = $widget->api_data;
 
         $instance = wp_parse_args( (array) $instance, $this->default );
 
@@ -601,7 +704,7 @@ class Wp_widget_aklamator extends WP_Widget {
         $widget_id = $instance['widget_id'];
 
 
-        if($widget_data->api_data->flag && !empty($widget_data->api_data->data)): ?>
+        if($this->widget_data->flag && !empty($this->widget_data->data)): ?>
 
             <!-- title -->
             <p>
@@ -612,7 +715,7 @@ class Wp_widget_aklamator extends WP_Widget {
             <!-- Select - dropdown -->
             <label for="<?php echo $this->get_field_id('widget_id'); ?>"><?php _e('Widget:','envirra-backend'); ?></label>
             <select id="<?php echo $this->get_field_id('widget_id'); ?>" name="<?php echo $this->get_field_name('widget_id'); ?>">
-                <?php foreach ( $widget_data->api_data->data as $item ): ?>
+                <?php foreach ( $this->widget_data->data as $item ): ?>
                     <option <?php echo ($widget_id == $item->uniq_name)? 'selected="selected"' : '' ;?> value="<?php echo $item->uniq_name; ?>"><?php echo $item->title; ?></option>
                 <?php endforeach; ?>
             </select>
