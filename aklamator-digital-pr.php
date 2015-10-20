@@ -3,7 +3,7 @@
 Plugin Name: Aklamator - Digital PR
 Plugin URI: https://www.aklamator.com/wordpress
 Description: Aklamator digital PR service enables you to sell PR announcements, cross promote web sites using RSS feed and provide new services to your clients in digital advertising.
-Version: 1.9.2
+Version: 1.9.3
 Author: Aklamator
 Author URI: https://www.aklamator.com/
 License: GPL2
@@ -312,16 +312,32 @@ class AklamatorWidget
                 color: #f8f8f8;
             }
 
-            .btn { border: 1px solid #fff; font-size: 13px; border-radius: 3px; background: transparent; text-transform: uppercase; font-weight: 700; padding: 4px 10px; min-width: 162px; max-width: 100%; text-decoration: none;}
-            .btn:Hover, .btn.hovered { border: 1px solid #fff; }
-            .btn:Active, .btn.pressed { opacity: 1; border: 1px solid #fff; border-top: 3px solid #17ade0; -webkit-box-shadow: 0 0 0 transparent; box-shadow: 0 0 0 transparent; }
-            
-            .btn-primary { background: #1ac6ff; border:1px solid #1ac6ff; color: #fff; text-decoration: none;}
-            .btn-primary:hover, .btn-primary.hovered { background: #1ac6ff;  border:1px solid #1ac6ff; opacity:0.9; }
-            .btn-primary:Active, .btn-primary.pressed { background: #1ac6ff; border:1px solid #1ac6ff; }
+            .btn { font-size: 13px; border-radius: 5px; background: transparent; text-transform: uppercase; font-weight: 700; padding: 4px 10px; min-width: 162px; max-width: 100%; text-decoration: none;}
+
+            .btn-primary { background: #7BB32C; border:1px solid #fff; color: #fff; text-decoration: none}
+            .btn-primary:hover, .btn-primary.hovered { background: #7BB32C;  border:1px solid #167AC6; opacity:0.9; color: #fff }
+            .btn-primary:Active, .btn-primary.pressed { background: #7BB32C; border:1px solid #167AC6; color: #fff}
 
             .box{float: left; margin-left: 10px; width: 500px; background-color:#f8f8f8; padding: 10px; border-radius: 5px;}
             .right_sidebar{float: right; margin-left: 10px; width: 300px; background-color:#f8f8f8; padding: 10px; border-radius: 5px;}
+
+            .alert{
+                margin-bottom: 18px;
+                color: #c09853;
+                text-shadow: 0 1px 0 rgba(255,255,255,0.5);
+                background-color: #fcf8e3;
+                border: 1px solid #fbeed5;
+                -webkit-border-radius: 4px;
+                -moz-border-radius: 4px;
+                border-radius: 4px;
+                padding: 8px 35px 8px 14px;
+            }
+            .alert-msg {
+                color: #3a87ad;
+                background-color: #d9edf7;
+                border-color: #bce8f1;
+            }
+
 
         </style>
         <!-- Load css libraries -->
@@ -388,6 +404,12 @@ class AklamatorWidget
                     <p>
                         <input type="checkbox" id="aklamatorFeatured2Feed" name="aklamatorFeatured2Feed" <?php echo (get_option("aklamatorFeatured2Feed") == true ? 'checked="checked"' : ''); ?> >
                         <strong>Add featured</strong> images from posts to your site's RSS feed output
+                    </p>
+
+                    <p>
+                        <div class="alert alert-msg">
+                            <strong>Note </strong><span style="color: red">*</span>: By default, posts without images will not be shown in widgets. If you want to show them click on <strong>EDIT</strong> in table below!
+                        </div>
                     </p>
                     <?php if($this->api_data->flag === false): ?>
                         <p><span style="color:red"><?php echo $this->api_data->error; ?></span></p>
@@ -493,11 +515,20 @@ class AklamatorWidget
                                 <a href="<?php echo $domain->url; ?>" target="_blank"><?php echo $domain->title; ?></a><br/>
                             <?php endforeach; ?>
                         </td>
-                        <td style="vertical-align: middle"><div style="float: left; margin-right: 10px" class="button-group">
+                        <td style="vertical-align: middle">
+                            <div style="float: left; margin-right: 10px" class="button-group">
                                 <input type="button" class="button primary big submit" onclick="myFunction('<?php echo $item->uniq_name; ?>')" value="Preview Widget">
+                            </div>
                         </td>
                         <td style="vertical-align: middle;" ><?php echo "<a href = \"$this->aklamator_url"."widget/edit/$item->id\" target='_blank' title='Click & Login to change'>$item->img_size px</a>";  ?></td>
-                        <td style="vertical-align: middle;" ><?php echo "<a href = \"$this->aklamator_url"."widget/edit/$item->id\" target='_blank' title='Click & Login to change'>".$item->column_number ." x ". $item->row_number."</a>"; ?></td>
+                        <td style="vertical-align: middle;" ><?php echo "<a href = \"$this->aklamator_url"."widget/edit/$item->id\" target='_blank' title='Click & Login to change'>".$item->column_number ." x ". $item->row_number."</a>"; ?>
+
+                            <div style="float: right;">
+                                <?php echo "<a class=\"btn btn-primary\" href = \"$this->aklamator_url"."widget/edit/$item->id\" target='_blank' title='Edit widget settings'>Edit</a>"; ?>
+<!--                                <a type="button" class="button primary big submit"  value="Preview Widget">-->
+                            </div>
+
+                        </td>
                         <td style="vertical-align: middle;" ><?php echo $item->date_created; ?></td>
 
 
